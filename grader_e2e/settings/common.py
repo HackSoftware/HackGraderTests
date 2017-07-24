@@ -110,5 +110,3 @@ GRADE_PATH = "/grade"
 GRADE_URL = "http://localhost:8000" + GRADE_PATH
 
 TEST_RUNNER = 'django.test.runner.DiscoverRunner'
-GRADER_API_KEY = "640e50619d8229d7041348f18819effde1e8841b5e5d28188e056f25cdc48b7f"
-GRADER_SECRET_KEY = "e8fce0162bcdfefbf9f6a38612ccc40af9e85a6bd4aa59fd1ece7a89467c08a8"

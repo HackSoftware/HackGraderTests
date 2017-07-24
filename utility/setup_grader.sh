@@ -50,7 +50,7 @@ else
     sudo apt-get install rabbitmq-server
 fi
 
-sudo rabbitmq-server
+sudo rabbitmq-server &
 
 cd ~/HackGrader/hacktester/docker
 docker build -t grader .
@@ -63,6 +63,8 @@ cd ../../
 virtualenv -p python3 env
 source env/bin/activate
 pip install -r requirements/local.txt
+
+sudo systemctl start postgresql
 
 # requires postgres installed and setup
 if [[ -z `psql -l | grep hacktester` ]]; then

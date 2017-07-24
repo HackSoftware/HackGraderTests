@@ -17,7 +17,7 @@ class HackTesterTests(TestCase):
             "test_type": "unittest",
             "language": "python",
             "solution": read_binary_file('e2e_tests/fixtures/binary/solution.py'),
-            "test": read_binary_file('e2e_tests/fixtures/binary/tests.py')
+            "test": read_binary_file('e2e_tests/fixtures/binary/tests.py'),
         }
 
         req_and_resource = "POST {}".format(GRADE_PATH)
