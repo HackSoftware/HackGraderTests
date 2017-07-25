@@ -5,7 +5,7 @@ import os
 import time
 import hmac
 import hashlib
-from datetime import datetime, timedelta
+from datetime import datetime
 
 from settings.local import GRADER_API_KEY, GRADER_SECRET_KEY
 from settings.base import BASE_DIR
