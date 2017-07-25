@@ -88,3 +88,7 @@ cd ~/code/grader_e2e
 echo GRADER_API_KEY = "\"$key\"" >> grader_e2e/settings/local.py 
 echo GRADER_SECRET_KEY = "\"$secret\"" >> grader_e2e/settings/local.py 
 echo {} >> nonce.json
+
+cd ~/HackGrader
+python manage.py runserver &
+celery -A hacktester worker -B -E --loglevel=info &

@@ -1,14 +1,18 @@
 import requests
 import json
+from datetime import datetime
 
 from unittest import TestCase
 
-from settings.base import GRADE_URL, BASE_DIR
+from settings.base import GRADE_URL, BASE_DIR, THRESHOLD
 from ..test_helpers import prepare_and_get, prepare_and_post, poll
-from ..helpers import read_binary_file, output_checking_test_binary
+from ..helpers import read_binary_file, output_checking_test_binary, elapsed_time
 
 
 class HackTesterValidSolutionTests(TestCase):
+    def setUp(self):
+        self.start = datetime.now()
+
     def test_get_on_index_is_successful(self):
         response = requests.get('http://localhost:8000')
         self.assertEqual(200, response.status_code)
@@ -33,6 +37,9 @@ class HackTesterValidSolutionTests(TestCase):
         while response.status_code != 200:
             self.assertEqual(204, response.status_code)
             response = poll(check_url, path, req_and_resource)
+            time = elapsed_time(self.start)
+            if time > THRESHOLD:
+                break
 
         self.assertEqual(200, response.status_code)
         response_text = json.loads(response.text)
@@ -57,6 +64,9 @@ class HackTesterValidSolutionTests(TestCase):
         while response.status_code != 200:
             self.assertEqual(204, response.status_code)
             response = poll(check_url, path, req_and_resource)
+            time = elapsed_time(self.start)
+            if time > THRESHOLD:
+                break
 
         self.assertEqual(200, response.status_code)
         response_text = json.loads(response.text)
@@ -78,6 +88,9 @@ class HackTesterValidSolutionTests(TestCase):
         while response.status_code != 200:
             self.assertEqual(204, response.status_code)
             response = poll(check_url, path, req_and_resource)
+            time = elapsed_time(self.start)
+            if time > THRESHOLD:
+                break
 
         self.assertEqual(200, response.status_code)
         response_text = json.loads(response.text)
@@ -102,6 +115,9 @@ class HackTesterValidSolutionTests(TestCase):
         while response.status_code != 200:
             self.assertEqual(204, response.status_code)
             response = poll(check_url, path, req_and_resource)
+            time = elapsed_time(self.start)
+            if time > THRESHOLD:
+                break
 
         self.assertEqual(200, response.status_code)
         response_text = json.loads(response.text)
@@ -126,6 +142,9 @@ class HackTesterValidSolutionTests(TestCase):
         while response.status_code != 200:
             self.assertEqual(204, response.status_code)
             response = poll(check_url, path, req_and_resource)
+            time = elapsed_time(self.start)
+            if time > THRESHOLD:
+                break
 
         self.assertEqual(200, response.status_code)
         response_text = json.loads(response.text)
@@ -147,6 +166,9 @@ class HackTesterValidSolutionTests(TestCase):
         while response.status_code != 200:
             self.assertEqual(204, response.status_code)
             response = poll(check_url, path, req_and_resource)
+            time = elapsed_time(self.start)
+            if time > THRESHOLD:
+                break
 
         self.assertEqual(200, response.status_code)
         response_text = json.loads(response.text)
@@ -173,6 +195,9 @@ class HackTesterValidSolutionTests(TestCase):
         while response.status_code != 200:
             self.assertEqual(204, response.status_code)
             response = poll(check_url, path, req_and_resource)
+            time = elapsed_time(self.start)
+            if time > THRESHOLD:
+                break
 
         self.assertEqual(200, response.status_code)
         response_text = json.loads(response.text)
@@ -200,6 +225,9 @@ class HackTesterValidSolutionTests(TestCase):
         while response.status_code != 200:
             self.assertEqual(204, response.status_code)
             response = poll(check_url, path, req_and_resource)
+            time = elapsed_time(self.start)
+            if time > THRESHOLD:
+                break
 
         self.assertEqual(200, response.status_code)
         response_text = json.loads(response.text)
@@ -207,6 +235,9 @@ class HackTesterValidSolutionTests(TestCase):
 
 
 class HackTesterOutputValidTests(TestCase):
+    def setUp(self):
+        self.start = datetime.now()
+
     def test_output_check_with_valid_python_binary_solution_and_test_archive_is_successful(self):
         tests = output_checking_test_binary("python")
         data = {
@@ -227,6 +258,9 @@ class HackTesterOutputValidTests(TestCase):
         while response.status_code != 200:
             self.assertEqual(204, response.status_code)
             response = poll(check_url, path, req_and_resource)
+            time = elapsed_time(self.start)
+            if time > THRESHOLD:
+                break
 
         self.assertEqual(200, response.status_code)
         response_text = json.loads(response.text)
@@ -254,6 +288,9 @@ class HackTesterOutputValidTests(TestCase):
         while response.status_code != 200:
             self.assertEqual(204, response.status_code)
             response = poll(check_url, path, req_and_resource)
+            time = elapsed_time(self.start)
+            if time > THRESHOLD:
+                break
 
         self.assertEqual(200, response.status_code)
         response_text = json.loads(response.text)
@@ -282,6 +319,9 @@ class HackTesterOutputValidTests(TestCase):
         while response.status_code != 200:
             self.assertEqual(204, response.status_code)
             response = poll(check_url, path, req_and_resource)
+            time = elapsed_time(self.start)
+            if time > THRESHOLD:
+                break
 
         self.assertEqual(200, response.status_code)
         response_text = json.loads(response.text)
@@ -291,6 +331,9 @@ class HackTesterOutputValidTests(TestCase):
 
 
 class HackTesterErrorTests(TestCase):
+    def setUp(self):
+        self.start = datetime.now()
+
     def test_posting_python_solution_with_flake8_error_and_lint_true_is_invalid(self):
         data = {
             "test_type": "unittest",
@@ -310,6 +353,9 @@ class HackTesterErrorTests(TestCase):
         while response.status_code != 200:
             self.assertEqual(204, response.status_code)
             response = poll(check_url, path, req_and_resource)
+            time = elapsed_time(self.start)
+            if time > THRESHOLD:
+                break
 
         self.assertEqual(200, response.status_code)
         response_text = json.loads(response.text)
@@ -334,6 +380,9 @@ class HackTesterErrorTests(TestCase):
         while response.status_code != 200:
             self.assertEqual(204, response.status_code)
             response = poll(check_url, path, req_and_resource)
+            time = elapsed_time(self.start)
+            if time > THRESHOLD:
+                break
 
         self.assertEqual(200, response.status_code)
         response_text = json.loads(response.text)

@@ -5,6 +5,7 @@ import os
 import time
 import hmac
 import hashlib
+from datetime import datetime, timedelta
 
 from settings.local import GRADER_API_KEY, GRADER_SECRET_KEY
 from settings.base import BASE_DIR
@@ -77,3 +78,8 @@ def get_headers(body, req_and_resource):
                        'X-Nonce-Number': nonce}
 
     return request_headers
+
+
+def elapsed_time(time):
+    cur_time = datetime.now()
+    return (cur_time - time).seconds
