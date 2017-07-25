@@ -5,8 +5,8 @@ from urllib.parse import urlparse
 
 from test_plus import TestCase
 
-from ..client import get_headers, GRADE_PATH, GRADE_URL
-from ..helpers import read_binary_file, output_checking_test_binary
+from django.conf import settings
+from ..helpers import read_binary_file, output_checking_test_binary, get_headers
 
 
 class HackTesterValidSolutionTests(TestCase):
@@ -22,9 +22,9 @@ class HackTesterValidSolutionTests(TestCase):
             "test": read_binary_file('e2e_tests/fixtures/binary/tests.py'),
         }
 
-        req_and_resource = "POST {}".format(GRADE_PATH)
+        req_and_resource = "POST {}".format(settings.GRADE_PATH)
         headers = get_headers(json.dumps(data), req_and_resource)
-        response = requests.post(GRADE_URL, json=data, headers=headers)
+        response = requests.post(settings.GRADE_URL, json=data, headers=headers)
         self.assertEqual(202, response.status_code)
 
         check_url = response.headers['Location']
@@ -52,9 +52,9 @@ class HackTesterValidSolutionTests(TestCase):
             "test": read_binary_file('e2e_tests/fixtures/binary/tests.rb'),
         }
 
-        req_and_resource = "POST {}".format(GRADE_PATH)
+        req_and_resource = "POST {}".format(settings.GRADE_PATH)
         headers = get_headers(json.dumps(data), req_and_resource)
-        response = requests.post(GRADE_URL, json=data, headers=headers)
+        response = requests.post(settings.GRADE_URL, json=data, headers=headers)
         self.assertEqual(202, response.status_code)
 
         check_url = response.headers['Location']
@@ -85,9 +85,9 @@ class HackTesterValidSolutionTests(TestCase):
             }
         }
 
-        req_and_resource = "POST {}".format(GRADE_PATH)
+        req_and_resource = "POST {}".format(settings.GRADE_PATH)
         headers = get_headers(json.dumps(data), req_and_resource)
-        response = requests.post(GRADE_URL, json=data, headers=headers)
+        response = requests.post(settings.GRADE_URL, json=data, headers=headers)
         self.assertEqual(202, response.status_code)
 
         check_url = response.headers['Location']
@@ -115,9 +115,9 @@ class HackTesterValidSolutionTests(TestCase):
             "test": read_binary_file('e2e_tests/fixtures/binary/tests.js'),
         }
 
-        req_and_resource = "POST {}".format(GRADE_PATH)
+        req_and_resource = "POST {}".format(settings.GRADE_PATH)
         headers = get_headers(json.dumps(data), req_and_resource)
-        response = requests.post(GRADE_URL, json=data, headers=headers)
+        response = requests.post(settings.GRADE_URL, json=data, headers=headers)
         self.assertEqual(202, response.status_code)
 
         check_url = response.headers['Location']

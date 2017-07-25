@@ -1,6 +1,12 @@
 import base64
 import tarfile
+import json
 import os
+import time
+import hmac
+import hashlib
+
+from django.conf import settings
 
 
 def read_file(path):
@@ -34,3 +40,39 @@ def output_checking_test_binary(language):
     os.remove(test_archive)
 
     return binary
+
+
+def get_and_update_nonce(resource):
+    data = {}
+    r = -1
+
+    with open('nonce.json', 'r') as f:
+        data = json.load(f)
+
+    if resource not in data:
+        r = 1
+        data[resource] = [r]
+    else:
+        r = max(data[resource]) + 1
+        data[resource].append(r)
+
+    with open('nonce.json', 'w') as f:
+        json.dump(data, f, indent=4)
+
+    return str(r)
+
+
+def get_headers(body, req_and_resource):
+    nonce = get_and_update_nonce(req_and_resource)
+    date = time.strftime("%c")
+    msg = body + date + nonce
+    digest = hmac.new(bytearray(settings.GRADER_SECRET_KEY.encode('utf-8')),
+                      msg=msg.encode('utf-8'),
+                      digestmod=hashlib.sha256).hexdigest()
+
+    request_headers = {'Authentication': digest,
+                       'Date': date,
+                       'X-API-Key': settings.GRADER_API_KEY,
+                       'X-Nonce-Number': nonce}
+
+    return request_headers
