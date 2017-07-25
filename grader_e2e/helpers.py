@@ -6,7 +6,7 @@ import time
 import hmac
 import hashlib
 
-from django.conf import settings
+from settings.local import GRADER_API_KEY, GRADER_SECRET_KEY
 
 
 def read_file(path):
@@ -66,13 +66,13 @@ def get_headers(body, req_and_resource):
     nonce = get_and_update_nonce(req_and_resource)
     date = time.strftime("%c")
     msg = body + date + nonce
-    digest = hmac.new(bytearray(settings.GRADER_SECRET_KEY.encode('utf-8')),
+    digest = hmac.new(bytearray(GRADER_SECRET_KEY.encode('utf-8')),
                       msg=msg.encode('utf-8'),
                       digestmod=hashlib.sha256).hexdigest()
 
     request_headers = {'Authentication': digest,
                        'Date': date,
-                       'X-API-Key': settings.GRADER_API_KEY,
+                       'X-API-Key': GRADER_API_KEY,
                        'X-Nonce-Number': nonce}
 
     return request_headers
