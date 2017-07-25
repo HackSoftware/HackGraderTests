@@ -7,6 +7,7 @@ import hmac
 import hashlib
 
 from settings.local import GRADER_API_KEY, GRADER_SECRET_KEY
+from settings.base import BASE_DIR
 
 
 def read_file(path):
@@ -24,7 +25,7 @@ def read_binary_file(path):
 
 
 def create_tar_gz_archive(language):
-    path_to_tests = os.path.join("fixtures", "output_check", language, "tests")
+    path_to_tests = os.path.join(BASE_DIR + "fixtures", "output_check", language, "tests")
     test_files = os.listdir(path_to_tests)
     with tarfile.open(name="archive.tar.gz", mode="w:gz") as tar:
         for file in test_files:

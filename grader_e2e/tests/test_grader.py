@@ -7,7 +7,7 @@ from unittest import TestCase
 
 from settings.base import GRADE_PATH, GRADE_URL, BASE_DIR
 from ..test_helpers import prepare_and_get, prepare_and_post, poll
-from ..helpers import read_binary_file, get_headers
+from ..helpers import read_binary_file, get_headers, output_checking_test_binary
 
 
 class HackTesterValidSolutionTests(TestCase):
@@ -206,6 +206,90 @@ class HackTesterValidSolutionTests(TestCase):
         self.assertEqual(200, response.status_code)
         response_text = json.loads(response.text)
         self.assertEqual('OK', response_text['output']['test_status'])
+
+
+class HackTesterOutputValidTests(TestCase):
+    def test_output_check_with_valid_python_binary_solution_and_test_archive_is_successful(self):
+        tests = output_checking_test_binary("python")
+        data = {
+            "test_type": "output_checking",
+            "language": "python",
+            "solution": read_binary_file(BASE_DIR + 'fixtures/output_check/python/solution.py'),
+            "test": tests,
+            "extra_options": {
+                'archive_test_type': True
+            }
+        }
+
+        response = prepare_and_post(data)
+        self.assertEqual(202, response.status_code)
+
+        response, check_url, path, req_and_resource = prepare_and_get(response)
+
+        while response.status_code != 200:
+            self.assertEqual(204, response.status_code)
+            response = poll(check_url, path, req_and_resource)
+
+        self.assertEqual(200, response.status_code)
+        response_text = json.loads(response.text)
+        for output in response_text['output']:
+            self.assertEqual('OK', output['test_status'])
+            self.assertEqual('ok', output['test_output'])
+
+    def test_output_check_with_valid_ruby_binary_solution_and_test_archive_is_successful(self):
+        tests = output_checking_test_binary("ruby")
+        data = {
+            "test_type": "output_checking",
+            "language": "ruby",
+            "solution": read_binary_file(BASE_DIR + 'fixtures/output_check/ruby/solution.rb'),
+            "test": tests,
+            "extra_options": {
+                'archive_test_type': True
+            }
+        }
+
+        response = prepare_and_post(data)
+        self.assertEqual(202, response.status_code)
+
+        response, check_url, path, req_and_resource = prepare_and_get(response)
+
+        while response.status_code != 200:
+            self.assertEqual(204, response.status_code)
+            response = poll(check_url, path, req_and_resource)
+
+        self.assertEqual(200, response.status_code)
+        response_text = json.loads(response.text)
+        for output in response_text['output']:
+            self.assertEqual('OK', output['test_status'])
+            self.assertEqual('ok', output['test_output'])
+
+    def test_output_check_with_valid_java_binary_solution_and_test_archive_is_successful(self):
+        tests = output_checking_test_binary("java")
+        data = {
+            "test_type": "output_checking",
+            "language": "java",
+            "solution": read_binary_file(BASE_DIR + 'fixtures/output_check/java/solution.java'),
+            "test": tests,
+            "extra_options": {
+                'archive_test_type': True,
+                "class_name": "Factorial"
+            }
+        }
+
+        response = prepare_and_post(data)
+        self.assertEqual(202, response.status_code)
+
+        response, check_url, path, req_and_resource = prepare_and_get(response)
+
+        while response.status_code != 200:
+            self.assertEqual(204, response.status_code)
+            response = poll(check_url, path, req_and_resource)
+
+        self.assertEqual(200, response.status_code)
+        response_text = json.loads(response.text)
+        for output in response_text['output']:
+            self.assertEqual('OK', output['test_status'])
+            self.assertEqual('ok', output['test_output'])
 
 
 class HackTesterErrorTests(TestCase):
