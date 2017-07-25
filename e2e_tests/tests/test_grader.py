@@ -6,7 +6,7 @@ from urllib.parse import urlparse
 from test_plus import TestCase
 
 from django.conf import settings
-from ..helpers import read_binary_file, output_checking_test_binary, get_headers
+from ..helpers import read_binary_file, get_headers
 
 
 class HackTesterValidSolutionTests(TestCase):
