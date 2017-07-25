@@ -6,6 +6,7 @@ from urllib.parse import urlparse
 from unittest import TestCase
 
 from settings.base import GRADE_PATH, GRADE_URL, BASE_DIR
+from ..test_helpers import prepare_and_get, prepare_and_post, poll
 from ..helpers import read_binary_file, get_headers
 
 
@@ -26,23 +27,14 @@ class HackTesterValidSolutionTests(TestCase):
             "test": read_binary_file(BASE_DIR + 'fixtures/binary/tests.py'),
         }
 
-        req_and_resource = "POST {}".format(GRADE_PATH)
-        headers = get_headers(json.dumps(data), req_and_resource)
-        response = requests.post(GRADE_URL, json=data, headers=headers)
+        response = prepare_and_post(data)
         self.assertEqual(202, response.status_code)
 
-        check_url = response.headers['Location']
-
-        path = urlparse(check_url).path
-        req_and_resource = "GET {}".format(path)
-        headers = get_headers(path, req_and_resource)
-        response = requests.get(check_url, headers=headers)
+        response, check_url, path, req_and_resource = prepare_and_get(response)
 
         while response.status_code != 200:
             self.assertEqual(204, response.status_code)
-            headers = get_headers(path, req_and_resource)
-            response = requests.get(check_url, headers=headers)
-            time.sleep(1)
+            response = poll(check_url, path, req_and_resource)
 
         self.assertEqual(200, response.status_code)
         response_text = json.loads(response.text)
@@ -59,23 +51,14 @@ class HackTesterValidSolutionTests(TestCase):
             }
         }
 
-        req_and_resource = "POST {}".format(GRADE_PATH)
-        headers = get_headers(json.dumps(data), req_and_resource)
-        response = requests.post(GRADE_URL, json=data, headers=headers)
+        response = prepare_and_post(data)
         self.assertEqual(202, response.status_code)
 
-        check_url = response.headers['Location']
-
-        path = urlparse(check_url).path
-        req_and_resource = "GET {}".format(path)
-        headers = get_headers(path, req_and_resource)
-        response = requests.get(check_url, headers=headers)
+        response, check_url, path, req_and_resource = prepare_and_get(response)
 
         while response.status_code != 200:
             self.assertEqual(204, response.status_code)
-            headers = get_headers(path, req_and_resource)
-            response = requests.get(check_url, headers=headers)
-            time.sleep(1)
+            response = poll(check_url, path, req_and_resource)
 
         self.assertEqual(200, response.status_code)
         response_text = json.loads(response.text)
@@ -89,23 +72,14 @@ class HackTesterValidSolutionTests(TestCase):
             "test": read_binary_file(BASE_DIR + 'fixtures/binary/tests.rb'),
         }
 
-        req_and_resource = "POST {}".format(GRADE_PATH)
-        headers = get_headers(json.dumps(data), req_and_resource)
-        response = requests.post(GRADE_URL, json=data, headers=headers)
+        response = prepare_and_post(data)
         self.assertEqual(202, response.status_code)
 
-        check_url = response.headers['Location']
-
-        path = urlparse(check_url).path
-        req_and_resource = "GET {}".format(path)
-        headers = get_headers(path, req_and_resource)
-        response = requests.get(check_url, headers=headers)
+        response, check_url, path, req_and_resource = prepare_and_get(response)
 
         while response.status_code != 200:
             self.assertEqual(204, response.status_code)
-            headers = get_headers(path, req_and_resource)
-            response = requests.get(check_url, headers=headers)
-            time.sleep(1)
+            response = poll(check_url, path, req_and_resource)
 
         self.assertEqual(200, response.status_code)
         response_text = json.loads(response.text)
@@ -122,23 +96,14 @@ class HackTesterValidSolutionTests(TestCase):
             }
         }
 
-        req_and_resource = "POST {}".format(GRADE_PATH)
-        headers = get_headers(json.dumps(data), req_and_resource)
-        response = requests.post(GRADE_URL, json=data, headers=headers)
+        response = prepare_and_post(data)
         self.assertEqual(202, response.status_code)
 
-        check_url = response.headers['Location']
-
-        path = urlparse(check_url).path
-        req_and_resource = "GET {}".format(path)
-        headers = get_headers(path, req_and_resource)
-        response = requests.get(check_url, headers=headers)
+        response, check_url, path, req_and_resource = prepare_and_get(response)
 
         while response.status_code != 200:
             self.assertEqual(204, response.status_code)
-            headers = get_headers(path, req_and_resource)
-            response = requests.get(check_url, headers=headers)
-            time.sleep(1)
+            response = poll(check_url, path, req_and_resource)
 
         self.assertEqual(200, response.status_code)
         response_text = json.loads(response.text)
@@ -155,23 +120,14 @@ class HackTesterValidSolutionTests(TestCase):
             }
         }
 
-        req_and_resource = "POST {}".format(GRADE_PATH)
-        headers = get_headers(json.dumps(data), req_and_resource)
-        response = requests.post(GRADE_URL, json=data, headers=headers)
+        response = prepare_and_post(data)
         self.assertEqual(202, response.status_code)
 
-        check_url = response.headers['Location']
-
-        path = urlparse(check_url).path
-        req_and_resource = "GET {}".format(path)
-        headers = get_headers(path, req_and_resource)
-        response = requests.get(check_url, headers=headers)
+        response, check_url, path, req_and_resource = prepare_and_get(response)
 
         while response.status_code != 200:
             self.assertEqual(204, response.status_code)
-            headers = get_headers(path, req_and_resource)
-            response = requests.get(check_url, headers=headers)
-            time.sleep(1)
+            response = poll(check_url, path, req_and_resource)
 
         self.assertEqual(200, response.status_code)
         response_text = json.loads(response.text)
@@ -185,23 +141,14 @@ class HackTesterValidSolutionTests(TestCase):
             "test": read_binary_file(BASE_DIR + 'fixtures/binary/tests.js'),
         }
 
-        req_and_resource = "POST {}".format(GRADE_PATH)
-        headers = get_headers(json.dumps(data), req_and_resource)
-        response = requests.post(GRADE_URL, json=data, headers=headers)
+        response = prepare_and_post(data)
         self.assertEqual(202, response.status_code)
 
-        check_url = response.headers['Location']
-
-        path = urlparse(check_url).path
-        req_and_resource = "GET {}".format(path)
-        headers = get_headers(path, req_and_resource)
-        response = requests.get(check_url, headers=headers)
+        response, check_url, path, req_and_resource = prepare_and_get(response)
 
         while response.status_code != 200:
             self.assertEqual(204, response.status_code)
-            headers = get_headers(path, req_and_resource)
-            response = requests.get(check_url, headers=headers)
-            time.sleep(1)
+            response = poll(check_url, path, req_and_resource)
 
         self.assertEqual(200, response.status_code)
         response_text = json.loads(response.text)
@@ -220,23 +167,14 @@ class HackTesterValidSolutionTests(TestCase):
             }
         }
 
-        req_and_resource = "POST {}".format(GRADE_PATH)
-        headers = get_headers(json.dumps(data), req_and_resource)
-        response = requests.post(GRADE_URL, json=data, headers=headers)
+        response = prepare_and_post(data)
         self.assertEqual(202, response.status_code)
 
-        check_url = response.headers['Location']
-
-        path = urlparse(check_url).path
-        req_and_resource = "GET {}".format(path)
-        headers = get_headers(path, req_and_resource)
-        response = requests.get(check_url, headers=headers)
+        response, check_url, path, req_and_resource = prepare_and_get(response)
 
         while response.status_code != 200:
             self.assertEqual(204, response.status_code)
-            headers = get_headers(path, req_and_resource)
-            response = requests.get(check_url, headers=headers)
-            time.sleep(1)
+            response = poll(check_url, path, req_and_resource)
 
         self.assertEqual(200, response.status_code)
         response_text = json.loads(response.text)
@@ -256,23 +194,14 @@ class HackTesterValidSolutionTests(TestCase):
             }
         }
 
-        req_and_resource = "POST {}".format(GRADE_PATH)
-        headers = get_headers(json.dumps(data), req_and_resource)
-        response = requests.post(GRADE_URL, json=data, headers=headers)
+        response = prepare_and_post(data)
         self.assertEqual(202, response.status_code)
 
-        check_url = response.headers['Location']
-
-        path = urlparse(check_url).path
-        req_and_resource = "GET {}".format(path)
-        headers = get_headers(path, req_and_resource)
-        response = requests.get(check_url, headers=headers)
+        response, check_url, path, req_and_resource = prepare_and_get(response)
 
         while response.status_code != 200:
             self.assertEqual(204, response.status_code)
-            headers = get_headers(path, req_and_resource)
-            response = requests.get(check_url, headers=headers)
-            time.sleep(1)
+            response = poll(check_url, path, req_and_resource)
 
         self.assertEqual(200, response.status_code)
         response_text = json.loads(response.text)
@@ -291,23 +220,14 @@ class HackTesterErrorTests(TestCase):
             }
         }
 
-        req_and_resource = "POST {}".format(GRADE_PATH)
-        headers = get_headers(json.dumps(data), req_and_resource)
-        response = requests.post(GRADE_URL, json=data, headers=headers)
+        response = prepare_and_post(data)
         self.assertEqual(202, response.status_code)
 
-        check_url = response.headers['Location']
-
-        path = urlparse(check_url).path
-        req_and_resource = "GET {}".format(path)
-        headers = get_headers(path, req_and_resource)
-        response = requests.get(check_url, headers=headers)
+        response, check_url, path, req_and_resource = prepare_and_get(response)
 
         while response.status_code != 200:
             self.assertEqual(204, response.status_code)
-            headers = get_headers(path, req_and_resource)
-            response = requests.get(check_url, headers=headers)
-            time.sleep(1)
+            response = poll(check_url, path, req_and_resource)
 
         self.assertEqual(200, response.status_code)
         response_text = json.loads(response.text)
@@ -324,23 +244,14 @@ class HackTesterErrorTests(TestCase):
             }
         }
 
-        req_and_resource = "POST {}".format(GRADE_PATH)
-        headers = get_headers(json.dumps(data), req_and_resource)
-        response = requests.post(GRADE_URL, json=data, headers=headers)
+        response = prepare_and_post(data)
         self.assertEqual(202, response.status_code)
 
-        check_url = response.headers['Location']
-
-        path = urlparse(check_url).path
-        req_and_resource = "GET {}".format(path)
-        headers = get_headers(path, req_and_resource)
-        response = requests.get(check_url, headers=headers)
+        response, check_url, path, req_and_resource = prepare_and_get(response)
 
         while response.status_code != 200:
             self.assertEqual(204, response.status_code)
-            headers = get_headers(path, req_and_resource)
-            response = requests.get(check_url, headers=headers)
-            time.sleep(1)
+            response = poll(check_url, path, req_and_resource)
 
         self.assertEqual(200, response.status_code)
         response_text = json.loads(response.text)
