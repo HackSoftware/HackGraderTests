@@ -1,4 +1,1 @@
-from .common import *  # noqa
-
-
-BROKER_BACKEND = 'memory'
+from .local import *  # noqa

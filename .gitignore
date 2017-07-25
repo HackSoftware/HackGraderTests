@@ -102,3 +102,6 @@ ENV/
 
 # nonce 
 nonce.json
+
+# settings only for user
+local.py
