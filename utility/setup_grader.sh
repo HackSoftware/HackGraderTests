@@ -85,8 +85,8 @@ secret=`cat api_keys | grep Secret | awk -F": " '{print $2}'`
 python manage.py provision_initial_data
 
 cd ~/code/grader_e2e 
-echo GRADER_API_KEY = "\"$key\"" >> grader_e2e/settings/common.py 
-echo GRADER_SECRET_KEY = "\"$secret\"" >> grader_e2e/settings/common.py 
+echo GRADER_API_KEY = "\"$key\"" >> grader_e2e/settings/local.py 
+echo GRADER_SECRET_KEY = "\"$secret\"" >> grader_e2e/settings/local.py 
 echo {} >> nonce.json
 
 cd ~/HackGrader
