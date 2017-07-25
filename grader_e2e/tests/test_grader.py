@@ -1,13 +1,11 @@
 import requests
 import json
-import time
-from urllib.parse import urlparse
 
 from unittest import TestCase
 
-from settings.base import GRADE_PATH, GRADE_URL, BASE_DIR
+from settings.base import GRADE_URL, BASE_DIR
 from ..test_helpers import prepare_and_get, prepare_and_post, poll
-from ..helpers import read_binary_file, get_headers, output_checking_test_binary
+from ..helpers import read_binary_file, output_checking_test_binary
 
 
 class HackTesterValidSolutionTests(TestCase):
