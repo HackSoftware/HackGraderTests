@@ -53,7 +53,7 @@ fi
 sudo rabbitmq-server &
 
 cd ~/HackGrader/hacktester/docker
-docker build -t grader .
+sudo docker build -t grader .
 
 docker run grader /bin/bash --login -c "python3.5 --version"
 docker run grader /bin/bash --login -c "ruby --version"
@@ -81,14 +81,15 @@ python manage.py createsuperuser
 python manage.py create_api_user localhost:8000 >> api_keys
 key=`cat api_keys | grep Key | awk -F": " '{print $2}'`
 secret=`cat api_keys | grep Secret | awk -F": " '{print $2}'`
+rm api_keys
 
 python manage.py provision_initial_data
 
 cd ~/code/grader_e2e 
-echo GRADER_API_KEY = "\"$key\"" >> grader_e2e/settings/local.py 
-echo GRADER_SECRET_KEY = "\"$secret\"" >> grader_e2e/settings/local.py 
+echo GRADER_API_KEY = "\"$key\"" >> settings/local.py 
+echo GRADER_SECRET_KEY = "\"$secret\"" >> settings/local.py 
 echo {} >> nonce.json
 
 cd ~/HackGrader
-python manage.py runserver &
-celery -A hacktester worker -B -E --loglevel=info &
+python manage.py runserver >> /dev/null 2>&1 &
+celery -A hacktester worker -B -E --loglevel=info >> /dev/null 2>&1 &

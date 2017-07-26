@@ -105,3 +105,6 @@ nonce.json
 
 # settings only for user
 local.py
+
+# erlang stuff
+erl_crash.dump
