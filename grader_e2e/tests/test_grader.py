@@ -174,16 +174,17 @@ class HackTesterValidSolutionTests(TestCase):
         response_text = json.loads(response.text)
         self.assertEqual('OK', response_text['output']['test_status'])
 
-    def test_posting_with_valid_django_binary_solution_and_tests_archive_is_successful(self):
+    def test_posting_with_valid_django_solution_and_tests_is_successful(self):
         data = {
             "test_type": "unittest",
             "language": "python",
-            "solution": read_binary_file(BASE_DIR + 'fixtures/binary/django/4/solution.py'),
-            "test": read_binary_file(BASE_DIR + 'fixtures/binary/django/4/tests.tar.gz'),
+            "solution": read_binary_file(BASE_DIR + 'fixtures/binary/django/1/django_project.tar.gz'),
+            "test": read_binary_file(BASE_DIR + 'fixtures/binary/django/1/tests.tar.gz'),
             "extra_options": {
                 'archive_test_type': True,
+                'archive_solution_type': True,
                 'lint': False,
-                'time_limit': 20
+                'time_limit': 120
             }
         }
 
@@ -203,7 +204,7 @@ class HackTesterValidSolutionTests(TestCase):
         response_text = json.loads(response.text)
         self.assertEqual('OK', response_text['output']['test_status'])
 
-    def test_posting_with_valid_django_archive_solution_and_archive_tests_is_successful(self):
+    def test_posting_with_django_solution_and_archive_tests_without_project_requirements_is_successful(self):
         data = {
             "test_type": "unittest",
             "language": "python",
@@ -213,7 +214,65 @@ class HackTesterValidSolutionTests(TestCase):
                 'archive_test_type': True,
                 'archive_solution_type': True,
                 'lint': False,
-                'time_limit': 30
+                'time_limit': 120
+            }
+        }
+
+        response = prepare_and_post(data)
+        self.assertEqual(202, response.status_code)
+
+        response, check_url, path, req_and_resource = prepare_and_get(response)
+
+        while response.status_code != 200:
+            self.assertEqual(204, response.status_code)
+            response = poll(check_url, path, req_and_resource)
+            time = elapsed_time(self.start)
+            if time > THRESHOLD:
+                break
+
+        self.assertEqual(200, response.status_code)
+        response_text = json.loads(response.text)
+        self.assertEqual('OK', response_text['output']['test_status'])
+
+    def test_posting_with_django_archive_solution_and_binary_tests_is_successful(self):
+        data = {
+            "test_type": "unittest",
+            "language": "python",
+            "solution": read_binary_file(BASE_DIR + 'fixtures/binary/django/3/django_project.tar.gz'),
+            "test": read_binary_file(BASE_DIR + 'fixtures/binary/django/3/test.py'),
+            "extra_options": {
+                'archive_solution_type': True,
+                'lint': False,
+                'time_limit': 90
+            }
+        }
+
+        response = prepare_and_post(data)
+        self.assertEqual(202, response.status_code)
+
+        response, check_url, path, req_and_resource = prepare_and_get(response)
+
+        while response.status_code != 200:
+            self.assertEqual(204, response.status_code)
+            response = poll(check_url, path, req_and_resource)
+            time = elapsed_time(self.start)
+            if time > THRESHOLD:
+                break
+
+        self.assertEqual(200, response.status_code)
+        response_text = json.loads(response.text)
+        self.assertEqual('OK', response_text['output']['test_status'])
+
+    def test_posting_with_django_binary_solution_and_tests_archive_is_successful(self):
+        data = {
+            "test_type": "unittest",
+            "language": "python",
+            "solution": read_binary_file(BASE_DIR + 'fixtures/binary/django/4/solution.py'),
+            "test": read_binary_file(BASE_DIR + 'fixtures/binary/django/4/tests.tar.gz'),
+            "extra_options": {
+                'archive_test_type': True,
+                'lint': False,
+                'time_limit': 90
             }
         }
 
