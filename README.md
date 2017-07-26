@@ -1,18 +1,22 @@
 # HackGraderTests
 End to end tests for https://github.com/HackSoftware/HackGrader
 
+# Requirements
+* Postgresql installed and setup
+* Python virtualenv installed
+
 # Installation
 * Clone this repo in a directory code/ ( alternatively, change the paths to your own directory in the script )
 ```
 git clone git@github.com:HackSoftware/HackGraderTests.git
 ```
-* Give permissions to script
+* Give permissions to script ( from root directory )
 ```
 chmod +x utility/setup_grader.sh
 ```
-* Run script
+* Run script ( from root directory )
 ```
-bash setup_grader.sh
+bash utility/setup_grader.sh
 ```
 * Run tests
 ```
