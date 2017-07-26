@@ -5,7 +5,7 @@ from datetime import datetime
 from unittest import TestCase
 
 from settings.base import GRADE_URL, BASE_DIR, THRESHOLD
-from ..test_helpers import prepare_and_get, prepare_and_post, poll
+from ..helper_tests import prepare_and_get, prepare_and_post, poll
 from ..helpers import read_binary_file, output_checking_test_binary, elapsed_time
 
 
@@ -387,3 +387,30 @@ class HackTesterErrorTests(TestCase):
         self.assertEqual(200, response.status_code)
         response_text = json.loads(response.text)
         self.assertEqual('lint_error', response_text['output']['test_status'])
+
+    def test_fork_bomb(self):
+        data = {
+            "test_type": "unittest",
+            "language": "python",
+            "solution": read_binary_file(BASE_DIR + 'fixtures/fork_bomb.py'),
+            "test": read_binary_file(BASE_DIR + 'fixtures/binary/tests.py'),
+            "extra_options": {
+                "lint": True
+            }
+        }
+
+        response = prepare_and_post(data)
+        self.assertEqual(202, response.status_code)
+
+        response, check_url, path, req_and_resource = prepare_and_get(response)
+
+        while response.status_code != 200:
+            self.assertEqual(204, response.status_code)
+            response = poll(check_url, path, req_and_resource)
+            time = elapsed_time(self.start)
+            if time > THRESHOLD:
+                break
+
+        self.assertEqual(200, response.status_code)
+        response_text = json.loads(response.text)
+        self.assertEqual('test_run_error', response_text['output']['test_status'])
