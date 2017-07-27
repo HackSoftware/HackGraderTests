@@ -18,7 +18,9 @@ chmod +x utility/setup_grader.sh
 ```
 bash utility/setup_grader.sh
 ```
-* Run tests
+
+#  Run tests
+* Make a virtualenv for this project and install requirements
 ```
 cd ~/code/grader_e2e/
 pytest
