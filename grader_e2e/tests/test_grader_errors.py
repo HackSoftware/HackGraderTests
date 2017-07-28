@@ -1,12 +1,11 @@
-import requests
 import json
 from datetime import datetime
 
 from unittest import TestCase
 
-from settings.base import GRADE_URL, BASE_DIR, THRESHOLD
+from settings.base import BASE_DIR, THRESHOLD
 from ..helper_tests import prepare_and_get, prepare_and_post, poll
-from ..helpers import read_binary_file, output_checking_test_binary, elapsed_time
+from ..helpers import read_binary_file, elapsed_time
 
 
 class HackTesterErrorTests(TestCase):
