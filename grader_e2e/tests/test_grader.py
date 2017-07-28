@@ -500,3 +500,75 @@ class HackTesterErrorTests(TestCase):
         self.assertEqual(200, response.status_code)
         response_text = json.loads(response.text)
         self.assertEqual('test_run_error', response_text['output']['test_status'])
+
+    def test_js_infinite_loop_solution_with_valid_tests(self):
+        data = {
+            "test_type": "unittest",
+            "language": "javascript/nodejs",
+            "solution": read_binary_file(BASE_DIR + 'fixtures/binary/infiniteLoop_solution.js'),
+            "test": read_binary_file(BASE_DIR + 'fixtures/binary/infiniteLoop_tests.js'),
+        }
+
+        response = prepare_and_post(data)
+        self.assertEqual(202, response.status_code)
+
+        response, check_url, path, req_and_resource = prepare_and_get(response)
+
+        while response.status_code != 200:
+            self.assertEqual(204, response.status_code)
+            response = poll(check_url, path, req_and_resource)
+            time = elapsed_time(self.start)
+            if time > THRESHOLD:
+                break
+
+        self.assertEqual(200, response.status_code)
+        response_text = json.loads(response.text)
+        self.assertEqual('time_limit_reached', response_text['output']['test_status'])
+
+    def test_python_infinite_loop_solution_with_valid_tests(self):
+        data = {
+            "test_type": "unittest",
+            "language": "python",
+            "solution": read_binary_file(BASE_DIR + 'fixtures/binary/while_true_solution.py'),
+            "test": read_binary_file(BASE_DIR + 'fixtures/binary/while_true_tests.py'),
+        }
+
+        response = prepare_and_post(data)
+        self.assertEqual(202, response.status_code)
+
+        response, check_url, path, req_and_resource = prepare_and_get(response)
+
+        while response.status_code != 200:
+            self.assertEqual(204, response.status_code)
+            response = poll(check_url, path, req_and_resource)
+            time = elapsed_time(self.start)
+            if time > THRESHOLD:
+                break
+
+        self.assertEqual(200, response.status_code)
+        response_text = json.loads(response.text)
+        self.assertEqual('time_limit_reached', response_text['output']['test_status'])
+
+    def test_ruby_infinite_loop_solution_with_valid_tests(self):
+        data = {
+            "test_type": "unittest",
+            "language": "ruby",
+            "solution": read_binary_file(BASE_DIR + 'fixtures/binary/exec_loop_solution.rb'),
+            "test": read_binary_file(BASE_DIR + 'fixtures/binary/exec_loop_tests.rb'),
+        }
+
+        response = prepare_and_post(data)
+        self.assertEqual(202, response.status_code)
+
+        response, check_url, path, req_and_resource = prepare_and_get(response)
+
+        while response.status_code != 200:
+            self.assertEqual(204, response.status_code)
+            response = poll(check_url, path, req_and_resource)
+            time = elapsed_time(self.start)
+            if time > THRESHOLD:
+                break
+
+        self.assertEqual(200, response.status_code)
+        response_text = json.loads(response.text)
+        self.assertEqual('time_limit_reached', response_text['output']['test_status'])
