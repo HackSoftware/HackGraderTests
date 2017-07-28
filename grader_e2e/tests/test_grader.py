@@ -473,3 +473,30 @@ class HackTesterErrorTests(TestCase):
         self.assertEqual(200, response.status_code)
         response_text = json.loads(response.text)
         self.assertEqual('test_run_error', response_text['output']['test_status'])
+
+    def test_memory_limit(self):
+        data = {
+            "test_type": "unittest",
+            "language": "python",
+            "solution": read_binary_file(BASE_DIR + 'fixtures/memory_limit.py'),
+            "test": read_binary_file(BASE_DIR + 'fixtures/memory_limit_tests.py'),
+            "extra_options": {
+                "lint": True
+            }
+        }
+
+        response = prepare_and_post(data)
+        self.assertEqual(202, response.status_code)
+
+        response, check_url, path, req_and_resource = prepare_and_get(response)
+
+        while response.status_code != 200:
+            self.assertEqual(204, response.status_code)
+            response = poll(check_url, path, req_and_resource)
+            time = elapsed_time(self.start)
+            if time > THRESHOLD:
+                break
+
+        self.assertEqual(200, response.status_code)
+        response_text = json.loads(response.text)
+        self.assertEqual('test_run_error', response_text['output']['test_status'])
