@@ -17,9 +17,9 @@ class HackTesterValidSolutionTests(TestCase):
         response = requests.get('http://localhost:8000')
         self.assertEqual(200, response.status_code)
 
-    def test_get_on_grade_without_headers_is_not_successful(self):
+    def test_get_on_grade_is_forbidden(self):
         response = requests.get(GRADE_URL)
-        self.assertEqual(400, response.status_code)
+        self.assertEqual(405, response.status_code)
 
     def test_posting_with_valid_python_solution_and_tests_is_successful(self):
         data = {
