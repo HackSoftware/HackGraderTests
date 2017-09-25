@@ -191,3 +191,31 @@ class HackTesterErrorTests(TestCase):
         self.assertEqual(200, response.status_code)
         response_text = json.loads(response.text)
         self.assertEqual('time_limit_reached', response_text['output']['test_status'])
+
+    def test_time_limit_when_it_is_too_small(self):
+        data = {
+            "test_type": "unittest",
+            "language": "python",
+            "solution": read_binary_file(BASE_DIR + 'fixtures/binary/solution.py'),
+            "test": read_binary_file(BASE_DIR + 'fixtures/binary/tests.py'),
+            "extra_options": {
+                "lint": True,
+                "time_limit": 1,
+            }
+        }
+
+        response = prepare_and_post(data)
+        self.assertEqual(202, response.status_code)
+
+        response, check_url, path, req_and_resource = prepare_and_get(response)
+
+        while response.status_code != 200:
+            self.assertEqual(204, response.status_code)
+            response = poll(check_url, path, req_and_resource)
+            time = elapsed_time(self.start)
+            if time > THRESHOLD:
+                break
+
+        self.assertEqual(200, response.status_code)
+        response_text = json.loads(response.text)
+        self.assertEqual('time_limit_reached', response_text['output']['test_status'])
